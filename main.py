@@ -7,6 +7,7 @@ import datetime as dt
 from constants import SECRET_KEY, UPLOAD_FOLDER
 
 
+
 def create_app():
     app = Flask(__name__)
     app.config["SECRET_KEY"] = SECRET_KEY
