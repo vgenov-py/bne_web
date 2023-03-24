@@ -1,0 +1,50 @@
+{%extends "base.html"%}
+
+{%block main%}
+{%if not data%}
+<form method="GET" action="">
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Nombre</label>
+    <input name="100" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Género</label>
+    <input name="375" type="text" class="form-control">
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Profesión</label>
+    <input name="374" type="text" class="form-control">
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">País/Comunidad/Provincia</label>
+    <input name="781" type="text" class="form-control">
+  </div>
+    <button type="submit" class="btn btn-dark">Query!</button>
+  </form>
+{%endif%}
+{%if data%}
+<div>
+  <p>Registros: {{data.length}} - Tiempo: {{data.time}}</p>
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">lat lng</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      {%for record in data.data%}
+      <tr>
+        <th>{{record.ID_BNE}}</th>
+        <th>{{record.Nombre}}</th>
+        <th>{{record.lat_lng}}</th>
+      </tr>
+      {%endfor%}
+    </tbody>
+  </table>
+</div>
+{%endif%}
+
+{%endblock%}
