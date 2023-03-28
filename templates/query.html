@@ -1,33 +1,49 @@
 {%extends "base.html"%}
 
 {%block main%}
+<form action="" method="GET">
 <div class="container-sm">
-    <select name="dataset" id="" class="form-select" >
-        <option value="per">Persona</option>
+    <select id="select_dataset" class="form-select" >
         <option value="geo">Geográfico</option>
+        <option value="per">Persona</option>
     </select>
 </div>
 <div class="container-sm">
-    <div id="filter_container" class="container-sm">
-        {%include "filter.html"%}
-    </div>
-    <button class="btn btn-dark" onclick="add_filter(this)">Add</button>
-    <button class="btn btn-dark" onclick="show_filters(this)">Query</button>
+        <div id="filter_container" class="container-sm">
+            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt cumque quas sed corporis ut aspernatur, debitis maiores iure aliquid. Molestias assumenda, veniam facere minus dolores eveniet aperiam quaerat saepe amet.</p>
+            {%include "filter.html"%}
+        </div>
+        <a class="btn btn-dark" onclick="add_filter(this)">Add</a>
+        <button class="btn btn-dark" onclick="show_filters(this)" type="submit">Query</button>
+    </form> 
 </div>
 <script defer>
     const add_filter = (button) => {
         const container = document.querySelector("#filter_container");
-        container.innerHTML += `{%include "filter.html"%}`;
-        // container.appendChild(document.querySelector(".b_filter_group"));
+        const node = document.querySelector(".filter_div").cloneNode(true);
+        Array(...node.getElementsByTagName("input")).forEach((input) => input.value = null)
+        container.appendChild(node)
+        console.log();
     };
-    const show_filters = (button) => {
-        const args = {}
-        const values = Array(...document.querySelectorAll(".v"));
-        const keys = Array(...document.querySelectorAll(".k")).forEach((input, i) => {
-            args[input.value] = values.at(i).value
+    const show_filters = async (button) => {
+        const keys = Array(...document.getElementsByClassName("k"));
+        const values = Array(...document.getElementsByClassName("v"));
+        keys.forEach((key, i) => {
+            console.log(key.value);
+            key.setAttribute("name", key.value);
+            key.value = values.at(i).value;
         });
-        console.log(args);
+        const form = document.querySelector("form");
+        const select =document.querySelector("#select_dataset");
+        const  dataset = select.options[select.selectedIndex].value;
+        form.setAttribute("action", dataset);
 
+    };
+    const trash_filter = (button) => {
+        const div_filter = button.parentElement.parentElement.parentElement;
+        if (div_filter.parentElement.children.length > 2) {
+            div_filter.remove();
+        };
     };
 </script>
 {%endblock%}

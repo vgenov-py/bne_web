@@ -9,16 +9,17 @@
   </div>
   <div class="mb-3">
     <label for="exampleInputPassword1" class="form-label">Género</label>
-    <input name="375" type="text" class="form-control">
+    <input name="375" type="text" class="form-control" id="exampleInputPassword1">
   </div>
   <div class="mb-3">
     <label for="exampleInputPassword1" class="form-label">Profesión</label>
-    <input name="374" type="text" class="form-control">
+    <input name="374" type="text" class="form-control" id="exampleInputPassword1">
   </div>
   <div class="mb-3">
-    <label for="exampleInputPassword1" class="form-label">País/Comunidad/Provincia</label>
-    <input name="781" type="text" class="form-control">
+    <label for="exampleInputPassword1" class="form-label">Nacionalidad</label>
+    <input name="377" type="text" class="form-control" id="exampleInputPassword1">
   </div>
+
     <button type="submit" class="btn btn-dark">Query!</button>
   </form>
 {%endif%}
@@ -29,17 +30,16 @@
     <thead>
       <tr>
         <th scope="col">ID</th>
-        <th scope="col">Nombre</th>
-        <th scope="col">lat lng</th>
-
+        <th scope="col">100</th>
+        <th scope="col">375</th>
       </tr>
     </thead>
     <tbody>
       {%for record in data.data%}
       <tr>
-        <th>{{record.ID_BNE}}</th>
-        <th>{{record.Nombre}}</th>
-        <th>{{record.lat_lng}}</th>
+        <th>{{record.id}}</th>
+        <th>{{record.t_100}}</th>
+        <th>{{record.t_375}}</th>
       </tr>
       {%endfor%}
     </tbody>
