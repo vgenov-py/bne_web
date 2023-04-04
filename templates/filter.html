@@ -1,6 +1,6 @@
-<div class="container-sm border border-1 d-flex align-items-center my-4 filter_div" style="height:75px">
+<div class="container-sm border border-1 d-flex align-items-center my-4 filter_div position-relative" style="height:75px">
     <div class="input-group b_filter_group" style="height: 50px;">
-        <input  type="text" class="form-control k" placeholder="Nombre, fecha de nacimiento...">
+        <input  type="text" class="form-control k" placeholder="Nombre, fecha de nacimiento..." onkeypress="show_ul(this)">
         <select class="form-select" aria-label="Default select example" name="with">
             <option selected value="">con valor</option>
             <option value="!">sin valor</option>
@@ -16,4 +16,5 @@
         </button>
         </div>
     </div>
+    <!-- <ul id="dropdown" class="list-group position-absolute" style="width: 200px; top:90%"></ul> -->
 </div>

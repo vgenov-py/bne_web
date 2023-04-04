@@ -1,49 +1,48 @@
 {%extends "base.html"%}
-
+{%block head%}
+<script src="/static/js/query_builder.js" defer></script>
+<script src="/static/js/filter.js" defer></script>
+{%endblock%}
 {%block main%}
-<form action="" method="GET">
-<div class="container-sm">
-    <select id="select_dataset" class="form-select" >
-        <option value="geo">Geográfico</option>
-        <option value="per">Persona</option>
-    </select>
+<div action="" method="GET">
+<div class="container-sm d-flex flex-row justify-content-between">
+    <div style="width: 300px;" >
+        <label for="select_dataset" class="d-flex justify-content-center">Conjunto de datos</label>
+        <select id="dataset" class="form-select" >
+            <option value="geo">Geográfico</option>
+            <option value="per">Persona</option>
+            <option value="mon">Monografías modernas</option>
+        </select>
+    </div>
+    <div style="width: 300px;">
+        <label for="view" class="d-flex justify-content-center">Vista</label>
+        <select id="view" class="form-select">
+            <option value="">Completa</option>
+            <option value="marc">Bilbiotecario/a</option>
+            <option value="human">Usuario/a</option>
+        </select>
+    </div>
+    <div style="width: 300px;">
+        <label for="limit" class="d-flex justify-content-center">Límite</label>
+        <select id="limit" class="form-select">
+            <option value="1000" selected>1000</option>
+            <option value="10000">10000</option>
+            <option value="100000">100000</option>
+        </select>
+    </div>
 </div>
 <div class="container-sm">
         <div id="filter_container" class="container-sm">
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt cumque quas sed corporis ut aspernatur, debitis maiores iure aliquid. Molestias assumenda, veniam facere minus dolores eveniet aperiam quaerat saepe amet.</p>
+            <p class="mt-4 d-flex justify-content-center">¡Construye tu propia consulta!</p>
+            <p class="d-flex justify-content-center">También puedes realizar las consultas directamente en BNE API, ¿No sabes cómo? ¡Sigue la&nbsp<a href="http://139.162.183.85/api" target="_blank">Documentación</a>!</p>
             {%include "filter.html"%}
         </div>
+        
         <a class="btn btn-dark" onclick="add_filter(this)">Add</a>
-        <button class="btn btn-dark" onclick="show_filters(this)" type="submit">Query</button>
-    </form> 
+        <button class="btn btn-dark" onclick="show_data()">Query</button>
+    </div> 
 </div>
-<script defer>
-    const add_filter = (button) => {
-        const container = document.querySelector("#filter_container");
-        const node = document.querySelector(".filter_div").cloneNode(true);
-        Array(...node.getElementsByTagName("input")).forEach((input) => input.value = null)
-        container.appendChild(node)
-        console.log();
-    };
-    const show_filters = async (button) => {
-        const keys = Array(...document.getElementsByClassName("k"));
-        const values = Array(...document.getElementsByClassName("v"));
-        keys.forEach((key, i) => {
-            console.log(key.value);
-            key.setAttribute("name", key.value);
-            key.value = values.at(i).value;
-        });
-        const form = document.querySelector("form");
-        const select =document.querySelector("#select_dataset");
-        const  dataset = select.options[select.selectedIndex].value;
-        form.setAttribute("action", dataset);
-
-    };
-    const trash_filter = (button) => {
-        const div_filter = button.parentElement.parentElement.parentElement;
-        if (div_filter.parentElement.children.length > 2) {
-            div_filter.remove();
-        };
-    };
-</script>
+<div class="container-sm d-flex flex-row justify-content-between mt-5">
+    <h3>Resultados</h3>
+</div>
 {%endblock%}
