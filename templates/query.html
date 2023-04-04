@@ -38,11 +38,12 @@
             {%include "filter.html"%}
         </div>
         
-        <a class="btn btn-dark" onclick="add_filter(this)">Add</a>
-        <button class="btn btn-dark" onclick="show_data()">Query</button>
+        <a class="btn btn-dark" onclick="add_filter(this)">Agregar filtro</a>
+        <button class="btn btn-dark" onclick="show_data()">Mostrar resultados</button>
     </div> 
 </div>
-<div class="container-sm d-flex flex-row justify-content-between mt-5">
-    <h3>Resultados</h3>
+<div class="container-sm d-flex flex-column justify-content-center mt-5">
+    <h3 class="text-center">Resultados</h3>
+    <ul class="list-group" id="results"></ul>
 </div>
 {%endblock%}
