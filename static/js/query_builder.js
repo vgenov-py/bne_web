@@ -24,7 +24,7 @@ const trash_filter = (button) => {
     };
 };
 
-const base_url = "http://139.162.185.83:3000/api"
+const base_url = "http://139.162.183.85/api"
 let query;
 
 const get_data = async() => {
