@@ -38,12 +38,16 @@
             {%include "filter.html"%}
         </div>
         
-        <a class="btn btn-dark" onclick="add_filter(this)">Agregar filtro</a>
+        <button class="btn btn-dark" onclick="add_filter(this)">Agregar filtro</button>
         <button class="btn btn-dark" onclick="show_data()">Mostrar resultados</button>
+        <!-- <a class="btn btn-dark" id="download_button">Descargar</a> -->
     </div> 
 </div>
-<div class="container-sm d-flex flex-column justify-content-center mt-5">
-    <h3 class="text-center">Resultados</h3>
+<div class="container-sm d-flex flex-column justify-content-center mt-5 visually-hidden" id="results_div">
+    <h3 class="text-center mb-3">Resultados</h3>
+    <div class="text-center visually-hidden" id="results_spinner">
+    <div class="spinner-grow" role="status"></div>
+    </div>
     <ul class="list-group" id="results"></ul>
 </div>
 {%endblock%}

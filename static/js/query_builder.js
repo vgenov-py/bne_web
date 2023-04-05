@@ -39,28 +39,35 @@ const get_data = async() => {
     if (filters) {
         url += `&${filters}`
     };
-    console.log(url)
-    const res = await fetch(url);
+    console.log(url);
+
+    let res = await fetch(url);
+        // const blob = await res.blob()
+        // const file = window.URL.createObjectURL(blob);
+        // res = await fetch(url);
+        // const a_download = document.querySelector("#download_button");
+        // a_download.href = file;
+        // a_download.a_download = `${dataset}.json`;
+        // a_download.target = "_blank";
+        // a_download.click();
+        // a_download.remove();
     const data = await res.json();
     return data;
 };
 
 const show_data = async() => {
+    const results_div = document.querySelector("#results_div");
     const results = document.querySelector("#results");
+    const spinner = document.querySelector("#results_spinner");
+    results_div.className = "container-sm d-flex flex-column justify-content-center mt-5";
+    spinner.className = "text-center";
     results.innerHTML = "";
-    
     const data = await get_data();
     if (!data.success) {
         return
     };
+    spinner.className = "visually-hidden";
     const records = data.data.slice(0,10);
-    `
-    <ul class="list-group list-group-horizontal">
-  <li class="list-group-item">An item</li>
-  <li class="list-group-item">A second item</li>
-  <li class="list-group-item">A third item</li>
-</ul>`;
-    console.log(records)
 
     const ul_k = document.createElement("ul");
         ul_k.className = "list-group list-group-horizontal";
@@ -88,3 +95,24 @@ const show_data = async() => {
 
 }
 
+// const download = async(a) => {
+//     const url = `${base_url}/per`
+//     const options = {};
+//     const res = await get_data(true);
+//     const blob = await res.blob();
+//     const file =  window.URL.createObjectURL(blob);
+//     a.href = file;
+//     // fetch(url, options)
+//     // .then( res => res.blob() )
+//     // .then( async blob => {
+//     //     const file = window.URL.createObjectURL(blob);
+//     //     window.location.assign(file);
+//     //     a.href = file;
+//     //     a.download = "per.json";
+//     //     a.target = "_blank"
+//     // });
+// };
+
+// console.log(download);
+
+// download()
