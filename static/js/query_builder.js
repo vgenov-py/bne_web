@@ -27,7 +27,7 @@ const trash_filter = (button) => {
 const base_url = "http://139.162.183.85/api"
 let query;
 
-const get_data = async() => {
+const get_data = async(blob=false) => {
     const dataset = document.querySelector("#dataset").value;
     const limit = document.querySelector("#limit").value;
     const view = document.querySelector("#view").value;
@@ -42,15 +42,10 @@ const get_data = async() => {
     console.log(url);
 
     let res = await fetch(url);
-        // const blob = await res.blob()
-        // const file = window.URL.createObjectURL(blob);
-        // res = await fetch(url);
-        // const a_download = document.querySelector("#download_button");
-        // a_download.href = file;
-        // a_download.a_download = `${dataset}.json`;
-        // a_download.target = "_blank";
-        // a_download.click();
-        // a_download.remove();
+    if (blob) {
+        const blob = await res.blob()
+        return window.URL.createObjectURL(blob);
+    };
     const data = await res.json();
     return data;
 };
@@ -59,14 +54,27 @@ const show_data = async() => {
     const results_div = document.querySelector("#results_div");
     const results = document.querySelector("#results");
     const spinner = document.querySelector("#results_spinner");
+    const title = document.querySelector("#results_title");
+    const download_button = document.querySelector("#download_button");
+    download_button.className = "btn btn-dark disabled";
+    download_button.innerHTML = "Descargar";
     results_div.className = "container-sm d-flex flex-column justify-content-center mt-5";
     spinner.className = "text-center";
     results.innerHTML = "";
+    title.innerHTML = "";
     const data = await get_data();
     if (!data.success) {
         return
+    }
+    else if (data.length == 0) {
+        title.innerHTML = `No hay resultados que cumplan el/los criterios de búsqueda`;
+        spinner.className = "visually-hidden";
+        return
     };
+    console.log(data);
     spinner.className = "visually-hidden";
+    title.innerHTML = `Resultados: ${data.length} - ${parseFloat(data.time).toFixed(2)}s`
+    download_button.className = "btn btn-dark";
     const records = data.data.slice(0,10);
 
     const ul_k = document.createElement("ul");
@@ -95,24 +103,21 @@ const show_data = async() => {
 
 }
 
-// const download = async(a) => {
-//     const url = `${base_url}/per`
-//     const options = {};
-//     const res = await get_data(true);
-//     const blob = await res.blob();
-//     const file =  window.URL.createObjectURL(blob);
-//     a.href = file;
-//     // fetch(url, options)
-//     // .then( res => res.blob() )
-//     // .then( async blob => {
-//     //     const file = window.URL.createObjectURL(blob);
-//     //     window.location.assign(file);
-//     //     a.href = file;
-//     //     a.download = "per.json";
-//     //     a.target = "_blank"
-//     // });
-// };
+const download_json = async (a) => {
+    const spinner = Array(...document.querySelector("#results_spinner").children)[0].cloneNode();
+    spinner.className = "spinner-border spinner-border-sm";
+    a.innerHTML = "";
+    a.appendChild(spinner);
+    const file = await get_data(true);
+    if (file) {
+        a.href = file;
+        a.download = `${document.querySelector("#dataset").value}.json`;
+        a.setAttribute("onclick", "");
+        a.click();
+        a.innerHTML = "Descargado :)";
+    }
+    else {
+        a.innerHTML = "No hay resultados";
+    };
 
-// console.log(download);
-
-// download()
+};

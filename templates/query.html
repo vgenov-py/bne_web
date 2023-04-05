@@ -17,9 +17,9 @@
     <div style="width: 300px;">
         <label for="view" class="d-flex justify-content-center">Vista</label>
         <select id="view" class="form-select">
-            <option value="">Completa</option>
-            <option value="marc">Bilbiotecario/a</option>
-            <option value="human">Usuario/a</option>
+            <option value="human">Simplificada</option>
+            <option value="marc">MARC21</option>
+            <option value="">Detallada</option>
         </select>
     </div>
     <div style="width: 300px;">
@@ -40,11 +40,11 @@
         
         <button class="btn btn-dark" onclick="add_filter(this)">Agregar filtro</button>
         <button class="btn btn-dark" onclick="show_data()">Mostrar resultados</button>
-        <!-- <a class="btn btn-dark" id="download_button">Descargar</a> -->
+        <a class="btn btn-dark disabled" onclick="download_json(this)" id="download_button">Descargar</a>
     </div> 
 </div>
 <div class="container-sm d-flex flex-column justify-content-center mt-5 visually-hidden" id="results_div">
-    <h3 class="text-center mb-3">Resultados</h3>
+    <h3 class="text-center mb-3" id="results_title"></h3>
     <div class="text-center visually-hidden" id="results_spinner">
     <div class="spinner-grow" role="status"></div>
     </div>
