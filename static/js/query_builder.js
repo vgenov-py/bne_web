@@ -114,6 +114,7 @@ const download_json = async (a) => {
         a.download = `${document.querySelector("#dataset").value}.json`;
         a.setAttribute("onclick", "");
         a.click();
+        a.setAttribute("onclick", "download_json(this)");
         a.innerHTML = "Descargado :)";
     }
     else {
