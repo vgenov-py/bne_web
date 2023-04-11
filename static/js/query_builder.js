@@ -50,11 +50,24 @@ const get_data = async(blob=false) => {
     return data;
 };
 
+const remove_col = (button) => {
+    cls_name = button.className.split(" ").at(-1);
+    button.parentElement.parentElement.remove()
+    elements = Array(...document.getElementsByClassName(cls_name));
+    elements.forEach((element) => {
+        element.remove();
+    });
+};
+
 const show_data = async() => {
     const results_div = document.querySelector("#results_div");
     const spinner = document.querySelector("#results_spinner");
     const title = document.querySelector("#results_title");
     const download_button = document.querySelector("#download_button");
+    const results_thead = document.querySelector("#results_thead");
+    const results_tbody = document.querySelector("#results_tbody");
+    results_thead.innerHTML = "";
+    results_tbody.innerHTML = "";
     download_button.className = "btn btn-dark disabled";
     download_button.innerHTML = "Descargar";
     results_div.className = "container-sm d-flex flex-column justify-content-center mt-5";
@@ -75,27 +88,32 @@ const show_data = async() => {
     download_button.className = "btn btn-dark";
     const records = data.data.slice(0,10);
 
-    const results_thead = document.querySelector("#results_thead");
     const tr_k = document.createElement("tr");
     for (const [k,v] of Object.entries(records[0])) {
         const th = document.createElement("th");
-        th.scope = "col";
-        th.innerHTML = k;
+        const btn_close = document.createElement("button");
+        // th.scope = "col";
+        // th.className = "bg_primary";
+        th.style.backgroundColor = "#39adcc"; //c8d8e4 078ca9
+        btn_close.className = `d-inline btn-close text-white ${k}`;
+        btn_close.setAttribute("onclick", "remove_col(this)");
+        th.innerHTML = `<div class="d-flex justify-content-between text-white">${k}</div>`;
+        th.firstChild.appendChild(btn_close);
+        
         tr_k.appendChild(th);
     };
     results_thead.appendChild(tr_k);
-    const results_tbody = document.querySelector("#results_tbody");
     records.forEach((record) => {
         const tr_v = document.createElement("tr");
         for (const [k,v] of Object.entries(record)) {
             const td = document.createElement("td");
             td.scope = "col";
+            td.className = k;
             td.innerHTML = v;
             tr_v.appendChild(td);
         };
         results_tbody.appendChild(tr_v);
     });
-
 }
 
 const download_json = async (a) => {
