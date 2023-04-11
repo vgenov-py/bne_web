@@ -12,7 +12,7 @@ const show_filters = () => {
     keys.forEach((key, i) => {
         key = key.value;
         let value = values.at(i).value;
-        result += `${key}=${value}&`
+        if (key && value) result += `${key}=${value}&`;
     });
     return result.substring(0,result.length-1);
 
@@ -75,28 +75,6 @@ const show_data = async() => {
     download_button.className = "btn btn-dark";
     const records = data.data.slice(0,10);
 
-    // const ul_k = document.createElement("ul");
-    //     ul_k.className = "list-group list-group-horizontal";
-    //     for (const [k,v] of Object.entries(records[0])) {
-    //         const li = document.createElement("li");
-    //         li.className = "list-group-item";
-    //         li.innerHTML = k;
-    //         ul_k.appendChild(li);
-    //     };
-    //     document.querySelector("#results").appendChild(ul_k);
-    
-    // records.forEach((record) => {
-
-    //     const ul = document.createElement("ul");
-    //     ul.className = "list-group list-group-horizontal";
-    //     for (const [k,v] of Object.entries(record)) {
-    //         const li = document.createElement("li");
-    //         li.className = "list-group-item";
-    //         li.innerHTML = v;
-    //         ul.appendChild(li);
-    //     };
-    //     results.appendChild(ul);
-    // });
     const results_thead = document.querySelector("#results_thead");
     const tr_k = document.createElement("tr");
     for (const [k,v] of Object.entries(records[0])) {

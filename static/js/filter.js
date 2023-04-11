@@ -47,5 +47,5 @@ const show_ul = (input) => {
         };
         // return;
     }
-    // setTimeout(() => deleter(), 3500);
+    setTimeout(() => deleter(), 3500);
 };
