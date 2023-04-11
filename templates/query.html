@@ -48,6 +48,17 @@
     <div class="text-center visually-hidden" id="results_spinner">
     <div class="spinner-grow" role="status"></div>
     </div>
-    <ul class="list-group" id="results"></ul>
-</div>
+    <div class="overflow-auto" style="height:500px;">
+        <table class="table">
+            <thead id="results_thead" class="border-bottom">
+            </thead>
+            <tbody id="results_tbody">
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+    <style>
+        #results_thead th {position:sticky; top:0; z-index:1; background-color: white; }
+    </style>
 {%endblock%}

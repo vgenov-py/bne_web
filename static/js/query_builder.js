@@ -52,7 +52,6 @@ const get_data = async(blob=false) => {
 
 const show_data = async() => {
     const results_div = document.querySelector("#results_div");
-    const results = document.querySelector("#results");
     const spinner = document.querySelector("#results_spinner");
     const title = document.querySelector("#results_title");
     const download_button = document.querySelector("#download_button");
@@ -60,7 +59,6 @@ const show_data = async() => {
     download_button.innerHTML = "Descargar";
     results_div.className = "container-sm d-flex flex-column justify-content-center mt-5";
     spinner.className = "text-center";
-    results.innerHTML = "";
     title.innerHTML = "";
     const data = await get_data();
     if (!data.success) {
@@ -77,29 +75,48 @@ const show_data = async() => {
     download_button.className = "btn btn-dark";
     const records = data.data.slice(0,10);
 
-    const ul_k = document.createElement("ul");
-        ul_k.className = "list-group list-group-horizontal";
-        for (const [k,v] of Object.entries(records[0])) {
-            const li = document.createElement("li");
-            li.className = "list-group-item";
-            li.innerHTML = k;
-            ul_k.appendChild(li);
-        };
-        document.querySelector("#results").appendChild(ul_k);
+    // const ul_k = document.createElement("ul");
+    //     ul_k.className = "list-group list-group-horizontal";
+    //     for (const [k,v] of Object.entries(records[0])) {
+    //         const li = document.createElement("li");
+    //         li.className = "list-group-item";
+    //         li.innerHTML = k;
+    //         ul_k.appendChild(li);
+    //     };
+    //     document.querySelector("#results").appendChild(ul_k);
     
+    // records.forEach((record) => {
+
+    //     const ul = document.createElement("ul");
+    //     ul.className = "list-group list-group-horizontal";
+    //     for (const [k,v] of Object.entries(record)) {
+    //         const li = document.createElement("li");
+    //         li.className = "list-group-item";
+    //         li.innerHTML = v;
+    //         ul.appendChild(li);
+    //     };
+    //     results.appendChild(ul);
+    // });
+    const results_thead = document.querySelector("#results_thead");
+    const tr_k = document.createElement("tr");
+    for (const [k,v] of Object.entries(records[0])) {
+        const th = document.createElement("th");
+        th.scope = "col";
+        th.innerHTML = k;
+        tr_k.appendChild(th);
+    };
+    results_thead.appendChild(tr_k);
+    const results_tbody = document.querySelector("#results_tbody");
     records.forEach((record) => {
-
-        const ul = document.createElement("ul");
-        ul.className = "list-group list-group-horizontal";
+        const tr_v = document.createElement("tr");
         for (const [k,v] of Object.entries(record)) {
-            const li = document.createElement("li");
-            li.className = "list-group-item";
-            li.innerHTML = v;
-            ul.appendChild(li);
+            const td = document.createElement("td");
+            td.scope = "col";
+            td.innerHTML = v;
+            tr_v.appendChild(td);
         };
-        results.appendChild(ul);
+        results_tbody.appendChild(tr_v);
     });
-
 
 }
 
