@@ -105,7 +105,7 @@ const show_data = async() => {
         btn_close.className = `d-inline btn-close text-white ${k}`;
         btn_close.setAttribute("onclick", "remove_col(this)");
         const tooltip_title = tooltips[k];
-        th.innerHTML = `<div  class="d-flex justify-content-between text-white tooltip_bne"  data-bs-custom-class="tooltip_bne" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${tooltip_title}">${k}</div>`; // data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip on top"
+        th.innerHTML = `<div  class="d-flex justify-content-between text-white"><span class="tooltip_bne"data-bs-custom-class="tooltip_bne" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${tooltip_title}">${k}</span></div>`; // data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip on top"
         th.firstChild.appendChild(btn_close);
         // th.setAttribute("data-bs-toggle", "tooltip");
         // th.setAttribute("data-bs-placement", "top");
