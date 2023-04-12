@@ -4,15 +4,14 @@ const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstra
 new bootstrap.Tooltip(document.body, {selector:".tooltip_bne"});
 
 const tooltips = {
-    id: "identifier from the authority file of the Biblioteca Nacional de España. Format for persons: 'XX' followed by 4 to 7 digits "
+    id: "identifier from the authority file of the Biblioteca Nacional de España. Format for persons: 'XX' followed by 4 to 7 digits"
 };
 
 const add_filter = (button) => {
     const container = document.querySelector("#filter_container");
     const node = document.querySelector(".filter_div").cloneNode(true);
-    Array(...node.getElementsByTagName("input")).forEach((input) => input.value = null)
-    container.appendChild(node)
-    console.log();
+    Array(...node.getElementsByTagName("input")).forEach((input) => input.value = null);
+    container.appendChild(node);
 };
 const show_filters = () => {
     let result = "";
@@ -35,15 +34,18 @@ const trash_filter = (button) => {
 
 const base_url = "http://139.162.183.85/api"
 let query;
-
+let headers;
 const get_data = async(blob=false) => {
     const dataset = document.querySelector("#dataset").value;
     const limit = document.querySelector("#limit").value;
     const view = document.querySelector("#view").value;
+    const fields = headers ? headers: null;
     let url = `${base_url}/${dataset}?limit=${limit}`
     const filters = show_filters();
-    if (view) {
-        url += `&view=${view}`
+    if (fields) {
+        url += `&fields=${fields}`;
+    } else {
+        url += `&view=${view}`;
     };
     if (filters) {
         url += `&${filters}`
@@ -56,11 +58,17 @@ const get_data = async(blob=false) => {
         return window.URL.createObjectURL(blob);
     };
     const data = await res.json();
+    if (data.data) {
+        headers = [...Object.keys(data.data[0])];
+    };
     return data;
 };
 
 const remove_col = (button) => {
     cls_name = button.className.split(" ").at(-1);
+    console.log(headers);
+    headers.splice(headers.indexOf(cls_name),1);
+    console.log(headers);
     button.parentElement.parentElement.remove()
     elements = Array(...document.getElementsByClassName(cls_name));
     elements.forEach((element) => {
@@ -107,9 +115,6 @@ const show_data = async() => {
         const tooltip_title = tooltips[k];
         th.innerHTML = `<div  class="d-flex justify-content-between text-white"><span class="tooltip_bne"data-bs-custom-class="tooltip_bne" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${tooltip_title}">${k}</span></div>`; // data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip on top"
         th.firstChild.appendChild(btn_close);
-        // th.setAttribute("data-bs-toggle", "tooltip");
-        // th.setAttribute("data-bs-placement", "top");
-        // th.setAttribute("data-bs-title", "XX");
         tr_k.appendChild(th);
     };
     results_thead.appendChild(tr_k);
@@ -144,4 +149,25 @@ const download_json = async (a) => {
         a.innerHTML = "No hay resultados";
     };
 
+};
+
+const download_csv = async (a) => {
+    const spinner = Array(...document.querySelector("#results_spinner").children)[0].cloneNode();
+    spinner.className = "spinner-border spinner-border-sm";
+    a.innerHTML = "";
+    a.appendChild(spinner);
+    const data = await get_data();
+    let csv = `data:text/csv;charset=utf-8,${Object.keys(data.data[0]).toString()}` + "\r\n";
+    console.log(data.data.length)
+    data.data.forEach((record) => {
+        let row = Object.values(record).toString();
+        csv += row + "\r\n";
+    });
+    console.log(csv.length);
+    a.download = `${document.querySelector("#dataset").value}.csv`;
+    a.setAttribute("href", encodeURI(csv));
+    a.setAttribute("onclick", "");
+    a.click();
+    a.setAttribute("onclick", "download_csv(this)");
+    a.innerHTML = "Descargado :)";
 };
