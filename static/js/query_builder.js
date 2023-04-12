@@ -85,7 +85,7 @@ const show_data = async() => {
     const results_tbody = document.querySelector("#results_tbody");
     results_thead.innerHTML = "";
     results_tbody.innerHTML = "";
-    download_button.className = "btn btn-dark disabled";
+    download_button.className = "btn btn-dark dropdown-toggle disabled";
     download_button.innerHTML = "Descargar";
     results_div.className = "container-sm d-flex flex-column justify-content-center mt-5";
     spinner.className = "text-center";
@@ -102,7 +102,7 @@ const show_data = async() => {
     console.log(data);
     spinner.className = "visually-hidden";
     title.innerHTML = `Resultados: ${data.length} - ${parseFloat(data.time).toFixed(2)}s`
-    download_button.className = "btn btn-dark";
+    download_button.className = "btn btn-dark dropdown-toggle";
     const records = data.data.slice(0,10);
 
     const tr_k = document.createElement("tr");
@@ -143,7 +143,7 @@ const download_json = async (a) => {
         a.setAttribute("onclick", "");
         a.click();
         a.setAttribute("onclick", "download_json(this)");
-        a.innerHTML = "Descargado :)";
+        a.innerHTML = "JSON";
     }
     else {
         a.innerHTML = "No hay resultados";
@@ -169,5 +169,4 @@ const download_csv = async (a) => {
     a.setAttribute("onclick", "");
     a.click();
     a.setAttribute("onclick", "download_csv(this)");
-    a.innerHTML = "Descargado :)";
 };
