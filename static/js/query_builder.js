@@ -1,3 +1,12 @@
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
+new bootstrap.Tooltip(document.body, {selector:".tooltip_bne"});
+
+const tooltips = {
+    id: "identifier from the authority file of the Biblioteca Nacional de España. Format for persons: 'XX' followed by 4 to 7 digits "
+};
+
 const add_filter = (button) => {
     const container = document.querySelector("#filter_container");
     const node = document.querySelector(".filter_div").cloneNode(true);
@@ -92,14 +101,15 @@ const show_data = async() => {
     for (const [k,v] of Object.entries(records[0])) {
         const th = document.createElement("th");
         const btn_close = document.createElement("button");
-        // th.scope = "col";
-        // th.className = "bg_primary";
         th.style.backgroundColor = "#39adcc"; //c8d8e4 078ca9
         btn_close.className = `d-inline btn-close text-white ${k}`;
         btn_close.setAttribute("onclick", "remove_col(this)");
-        th.innerHTML = `<div class="d-flex justify-content-between text-white">${k}</div>`;
+        const tooltip_title = tooltips[k];
+        th.innerHTML = `<div  class="d-flex justify-content-between text-white tooltip_bne"  data-bs-custom-class="tooltip_bne" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${tooltip_title}">${k}</div>`; // data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip on top"
         th.firstChild.appendChild(btn_close);
-        
+        // th.setAttribute("data-bs-toggle", "tooltip");
+        // th.setAttribute("data-bs-placement", "top");
+        // th.setAttribute("data-bs-title", "XX");
         tr_k.appendChild(th);
     };
     results_thead.appendChild(tr_k);
