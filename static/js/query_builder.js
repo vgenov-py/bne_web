@@ -35,15 +35,16 @@ const trash_filter = (button) => {
 const base_url = "http://139.162.183.85/api"
 let query;
 let headers;
-const get_data = async(blob=false) => {
+const get_data = async(blob=false, selected_fields=false) => {
     const dataset = document.querySelector("#dataset").value;
     const limit = document.querySelector("#limit").value;
     const view = document.querySelector("#view").value;
-    const fields = headers ? headers: null;
+    const fields = selected_fields ? selected_fields: null;
     let url = `${base_url}/${dataset}?limit=${limit}`
     const filters = show_filters();
     if (fields) {
-        url += `&fields=${fields}`;
+        console.log(url);
+        url += `&fields=${fields.join(",")}`;
     } else {
         url += `&view=${view}`;
     };
@@ -134,7 +135,7 @@ const download_json = async (a) => {
     spinner.className = "spinner-border spinner-border-sm";
     a.innerHTML = "";
     a.appendChild(spinner);
-    const file = await get_data(true);
+    const file = await get_data(true, headers);
     if (file) {
         a.href = file;
         a.download = `${document.querySelector("#dataset").value}.json`;
@@ -155,19 +156,18 @@ const download_csv = async (a) => {
     spinner.className = "spinner-border spinner-border-sm";
     a.innerHTML = "";
     a.appendChild(spinner);
-    const data = await get_data();
+    console.log(headers);
+    const data = await get_data(false,headers);
     let keys = "";
     Object.keys(data.data[0]).forEach((r) => keys += `"${r?r:""}";`);
-    // let csv = `data:text/csv;charset=utf-8,${Object.keys(data.data[0]).join(";")}` + "\n";
-    let csv = `data:text/csv;charset=utf-8,${keys}\n`;
+    // let csv = `data:text/csv;charset=utf-8,${Object.keys(data.data[0]).join(";")}` + "\r\n";
+    let csv = `data:text/csv;charset=utf-8,${keys}\r\n`;
     // let csv = `data:text/csv;charset=utf-8,"`;
-    console.log(data.data.length)
     data.data.forEach((record) => {
         let values = "";
         Object.values(record).forEach((r) => values += `"${r?r:""}";`);
-        csv += values + "\n";
+        csv += values + "\r\n";
     });
-    console.log(csv.length);
     a.download = `${document.querySelector("#dataset").value}.csv`;
     a.setAttribute("href", encodeURI(csv));
     a.setAttribute("onclick", "");

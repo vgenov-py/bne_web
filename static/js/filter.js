@@ -11,6 +11,11 @@ const navigate_ul = (ul) => {
     return lis.at(li_counter).innerHTML;
 };
 
+const set_ss_text = (li) => {
+    const children = [...li.parentElement.parentElement.getElementsByTagName("input")];
+    children.at(0).value = li.innerHTML;
+    li.parentElement.remove();
+};
 
 const show_ul = (input) => {
     
@@ -32,9 +37,11 @@ const show_ul = (input) => {
     options[dataset_to_search].forEach((li) => {
         if (li.toLowerCase().search(ss.toLowerCase()) >= 0) {
         const new_li = document.createElement("li");
-        new_li.className = "list-group-item";
+        new_li.className = "list-group-item li_hover";
         new_li.innerHTML =  li;
-            dropdown.appendChild(new_li);
+        new_li.setAttribute("onclick", "set_ss_text(this)");
+        // new_li.setAttribute("onmouseover", "set_ss_text(this)");
+        dropdown.appendChild(new_li);
         };
     });
     input_container.appendChild(dropdown);
@@ -47,5 +54,5 @@ const show_ul = (input) => {
         };
         // return;
     }
-    setTimeout(() => deleter(), 3500);
+    // setTimeout(() => deleter(), 3500);
 };
