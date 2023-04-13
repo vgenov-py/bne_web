@@ -7,7 +7,6 @@ let li_counter = 0;
 
 const navigate_ul = (ul) => {
     const lis = Array(...ul.getElementsByTagName("li"));
-    // lis.at(li_counter).style.backgroundColor = "red";
     return lis.at(li_counter).innerHTML;
 };
 
@@ -15,6 +14,26 @@ const set_ss_text = (li) => {
     const children = [...li.parentElement.parentElement.getElementsByTagName("input")];
     children.at(0).value = li.innerHTML;
     li.parentElement.remove();
+};
+
+const set_value = (option) => {
+    const input = option.parentElement.parentElement.getElementsByClassName("v")[0];
+    input.disabled = false;
+    if (input.value[0] == "!") {
+        input.value = input.value.substring(1)
+    };
+};
+
+const without_value = (option) => {
+    const input = option.parentElement.parentElement.getElementsByClassName("v")[0];
+    input.disabled = false;
+    if (input.value[0] != "!") {
+        input.value = `!${input.value}`;
+    };
+};
+
+const regardless_value = (option) => {
+    option.parentElement.parentElement.getElementsByClassName("v")[0].disabled = true;
 };
 
 const show_ul = (input) => {
@@ -33,7 +52,7 @@ const show_ul = (input) => {
     const input_container = deleter();
     const ss = input.value;
     dropdown.className = "list-group position-absolute";
-    dropdown.style = "top:90%"
+    dropdown.style = "top:90%; z-index:3;"
     options[dataset_to_search].forEach((li) => {
         if (li.toLowerCase().search(ss.toLowerCase()) >= 0) {
         const new_li = document.createElement("li");
@@ -54,5 +73,17 @@ const show_ul = (input) => {
         };
         // return;
     }
-    // setTimeout(() => deleter(), 3500);
+    setTimeout(() => deleter(), 3500);
+};
+
+const and_or_switch = (switch_element) => {
+    const [and,_, or] = [...switch_element.parentElement.parentElement.children];
+    // console.log(`${switch_element.parentElement.parentElement.parentElement.getElementsByTagName("input")[1].checked}`);
+    if (switch_element.checked) {
+        and.className = "";
+        or.className = "text-primary";
+    }else {
+        and.className = "text-primary";
+        or.className = "text-";
+    };
 };
