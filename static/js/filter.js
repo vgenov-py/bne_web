@@ -20,7 +20,7 @@ const set_value = (option) => {
     const input = option.parentElement.parentElement.getElementsByClassName("v")[0];
     input.disabled = false;
     if (input.value[0] == "!") {
-        input.value = input.value.substring(1)
+        input.value = input.value.substring(1);
     };
 };
 
