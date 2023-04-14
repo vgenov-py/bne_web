@@ -3,7 +3,13 @@ const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstra
 
 new bootstrap.Tooltip(document.body, {selector:".tooltip_bne"});
 const tooltips = {
-    id: "identifier from the authority file of the Biblioteca Nacional de España. Format for persons: 'XX' followed by 4 to 7 digits"
+    per: {"id_BNE": "identificador de la persona en el catálogo de la BNE", "otros_identificadores": "identificadores de la persona en otros catálogos (viaf, lcnf, isni, etc.)", "fecha_nacimiento": "fecha de nacimiento de la persona", "fecha_muerte": "fecha de muerte de la persona", "nombre_de_persona": "", "otros_atributos_persona": "título, cargo, etc. ", "lugar_nacimiento": "país, región, provincia y localidad donde ha nacido la persona", "lugar_muerte": "país, región, provincia y localidad donde ha fallecido la persona", "pais_relacionado": "otro país relacionado con la persona", "otros_lugares_relacionados": "otros lugares relacionados con la persona", "lugar_residencia": "lugar de residencia de la persona, si es especialmente significativo", "campo_actividad": "disciplina o actividad a la que se dedica la persona", "grupo_o_entidad_relacionada": "grupo, organismo, etc., a la que pertenece la persona", "ocupacion": "profesión desempeñada por la persona", "genero": "género de la persona (masculino, femenino u otros)", "lengua": "lengua en la que la persona escribe la mayor parte de su obra", "otros_nombres": "otros nombres por los que es conocida la persona", "persona_relacionada": "otras personas relacionadas con la persona", "nota_general": "más información sobre la persona", "fuentes_de_informacion": "fuentes de información de las que se han obtenido los datos de la persona", "otros_datos_biograficos": "otra información biográfica de la persona", "obras_relacionadas_en_el_catalogo_BNE": "obras relacionadas con la persona que se pueden encontrar en el catálogo de la BNE", "nombre_de_persona": "nombre de persona"},
+    geo: {
+        id: "identifier from the authority file of the Biblioteca Nacional de España. Format for persons: 'XX' followed by 4 to 7 digits"
+    },
+    mon: {
+        id: "X"
+    }
 };
 
 const base_url = "http://139.162.183.85/api";
@@ -174,7 +180,7 @@ const show_data = async() => {
         th.style.backgroundColor = "#39adcc"; //c8d8e4 078ca9
         btn_close.className = `d-inline btn-close text-white ${k}`;
         btn_close.setAttribute("onclick", "remove_col(this)");
-        const tooltip_title = tooltips[k];
+        const tooltip_title = tooltips[dataset.value][k];
         th.innerHTML = `<div  class="d-flex justify-content-between text-white"><span class="tooltip_bne"data-bs-custom-class="tooltip_bne" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${tooltip_title}">${k}</span></div>`; // data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip on top"
         th.firstChild.appendChild(btn_close);
         tr_k.appendChild(th);
