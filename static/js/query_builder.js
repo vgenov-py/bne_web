@@ -12,7 +12,7 @@ const tooltips = {
     }
 };
 
-const base_url = "http://139.162.183.85/api";
+const base_url = "http://144.91.118.190/api";
 let fields;
 const get_fields = async () => {
     const dataset = document.querySelector("#dataset").value;
@@ -48,12 +48,14 @@ const add_filter = (button) => {
     container.appendChild(node);
 };
 const show_filters = () => {
-    // let result = "";
+    let result = "";
     const test = {};
     keys_or = [];
     const keys = Array(...document.getElementsByClassName("k"));
     const values = Array(...document.getElementsByClassName("v"));
-    keys.forEach((key, i) => {
+
+    for (let i = 0; i < keys.length; i++) {
+        let key = keys.at(i);
         let value = values.at(i).value;
         let and_or_switch = key.parentElement.parentElement.parentElement.getElementsByClassName("bne_and_or")[0].getElementsByTagName("input")[0];
         key = key.value;
@@ -66,16 +68,34 @@ const show_filters = () => {
             } else {
                 test[key] = value;
             };
-            // result += `${key}=${value}&`;
         };
-    });
+        result += `${key}=${value}&`;
+    }
+
+    // keys.map((key) => {
+    //     let value = values.at(i).value;
+    //     let and_or_switch = key.parentElement.parentElement.parentElement.getElementsByClassName("bne_and_or")[0].getElementsByTagName("input")[0];
+    //     key = key.value;
+    //     if (and_or_switch.checked) {
+    //         keys_or.push(key) 
+    //     };
+    //     if (key && value && fields.indexOf(key) >= 0) {
+    //         if (test[key]) {
+    //             test[key] = test[key] + "||" + value;
+    //         } else {
+    //             test[key] = value;
+    //         };
+    //         // result += `${key}=${value}&`;
+    //     };
+    //     i ++;
+    // });
     keys_or.forEach((key_or) => {
         test[key_or] += "||";
     });
-    result = "";
-    Object.entries(test).forEach((kv) => {
-        result += `${kv.join("=")}&`
-    });
+    // result = "";
+    // Object.entries(test).forEach((kv) => {
+    //     result += `${kv.join("=")}&`
+    // });
     return result.substring(0,result.length -1);
     // return result.substring(0,result.length-1);
 };
