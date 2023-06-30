@@ -8,23 +8,37 @@ const tooltips = {
         id: "identifier from the authority file of the Biblioteca Nacional de España. Format for persons: 'XX' followed by 4 to 7 digits"
     },
     mon: {
-        id: "X"
+        "id_BNE": "Identificador de la monografía en el catálogo de la BNE", "pais_de_publicacion":"País donde se ha publicado la monografía",
+        "lengua_principal":"Lengua del contenido principal del documento","otras_lenguas":"Lenguas de otros contenidos (resúmenes, tablas de contenidos, notas, etc.)",
+        "lengua_original":"Lengua original de la que se ha traducido","fecha_de_publicacion":"Fecha en que se publicó la monografía o su primera entrega en caso de una monografía en varias partes",
+        "decada":"Década en la que se publicó la monografía o su primera entrega en caso de una monografía en varias partes","siglo":"Siglo en el  que se publicó la monografía o su primera entrega en caso de una monografía en varias partes",
+        "deposito_legal":"Número de Depósito Legal","ISBN":"International Standard Book Number","NIPO":"Número de Identificación de Publicaciones Oficiales",
+        "CDU":"Número de la Clasificación Decimal Universalque representa el tema tratado en la monografía", "autores":"responsables del contenido intelectual de la monografía",
+        "titulo":"Título de la obra tal y como aparece citado en la monografía", "mencion_de_autores":"Responsables del contenido intelectual tal y como aparecen citados en la monografía",
+        "otros_titulos":"Otros títulos de la obra que aparecen citados en la monografía","edicion":"Información sobre la edición",
+        "lugar_de_publicacion":"Localidad específica en la que se ha publicado la monografía", "editorial":"Nombre del editor responsable de la publicación de la monografía",
+        "extension":"Número de volúmenes, páginas, hojas, columnas, etc.", "otras_caracteristicas_fisicas":"ilustraciones, color, etc.","dimensiones":"Medida del alto de la publicación (en cm)",
+        "material_anejo":"Material complementario que acompaña a la publicación principal","serie":"Colección a la que pertenece la monografía","nota_de_contenido":"Más información sobre el contenido de la obra",
+        "notas":"Más información sobre la monografía","procedencia":"Nombre del último propietario del ejemplar antes de pasar a la BNE","premios":"Premios con los que ha sido galardonada la obra","tema":"Materia sobre la que trata la monografía",
+        "genero_forma":"Género al que pertenece la obra y forma que toma"
     }
 };
 
-const base_url = "http://144.91.118.190/api";
+// const base_url = "http://144.91.118.190/api";
+const base_url = "http://localhost:3000/api";
+
 let fields;
-const get_fields = async () => {
+const get_fields = async (view="") => {
     const dataset = document.querySelector("#dataset").value;
-    const url = `${base_url}/${dataset}?limit=1`;
+    const url = `${base_url}/fields/${dataset}?view=${view}`;
     const res = await fetch(url);
     const data = await res.json();
-    if (data.data) {
-        fields = Object.keys(data.data[0]);
+    if (data.fields) {
+        fields = data.fields;
     };
 };
-get_fields();
-
+const view = document.querySelector("#view").value;
+get_fields(document.querySelector("#view").value);
 const reset_and_ors = () => {
     [...document.querySelectorAll(".bne_and_or")].forEach((and_or) => {
         and_or.getElementsByTagName("input")[0].checked = false;
@@ -49,7 +63,7 @@ const add_filter = (button) => {
 };
 const show_filters = () => {
     let result = "";
-    const test = {};
+    const kvs = {};
     keys_or = [];
     const keys = Array(...document.getElementsByClassName("k"));
     const values = Array(...document.getElementsByClassName("v"));
@@ -59,45 +73,18 @@ const show_filters = () => {
         let value = values.at(i).value;
         let and_or_switch = key.parentElement.parentElement.parentElement.getElementsByClassName("bne_and_or")[0].getElementsByTagName("input")[0];
         key = key.value;
-        if (and_or_switch.checked) {
-            keys_or.push(key) 
-        };
-        if (key && value && fields.indexOf(key) >= 0) {
-            if (test[key]) {
-                test[key] = test[key] + "||" + value;
-            } else {
-                test[key] = value;
-            };
-        };
-        result += `${key}=${value}&`;
-    }
 
-    // keys.map((key) => {
-    //     let value = values.at(i).value;
-    //     let and_or_switch = key.parentElement.parentElement.parentElement.getElementsByClassName("bne_and_or")[0].getElementsByTagName("input")[0];
-    //     key = key.value;
-    //     if (and_or_switch.checked) {
-    //         keys_or.push(key) 
-    //     };
-    //     if (key && value && fields.indexOf(key) >= 0) {
-    //         if (test[key]) {
-    //             test[key] = test[key] + "||" + value;
-    //         } else {
-    //             test[key] = value;
-    //         };
-    //         // result += `${key}=${value}&`;
-    //     };
-    //     i ++;
-    // });
-    keys_or.forEach((key_or) => {
-        test[key_or] += "||";
-    });
-    // result = "";
-    // Object.entries(test).forEach((kv) => {
-    //     result += `${kv.join("=")}&`
-    // });
+        if (kvs[key]) {
+            kvs[key] += `||${value}`;
+        } else {
+            kvs[key] = value;
+        };
+        // result += `${key}=${value}&`;
+    }
+    for ([k,v] of Object.entries(kvs)) {
+        result += `${k}=${v}&`;
+    }
     return result.substring(0,result.length -1);
-    // return result.substring(0,result.length-1);
 };
 const trash_filter = (button) => {
     const div_filter = button.parentElement.parentElement.parentElement.parentElement;
@@ -125,7 +112,7 @@ const get_data = async(blob=false, selected_fields=false) => {
     const dataset = document.querySelector("#dataset").value;
     const limit = document.querySelector("#limit").value;
     const view = document.querySelector("#view").value;
-    const fields = selected_fields ? selected_fields: null;
+    let fields = selected_fields ? selected_fields: null;
     let url = `${base_url}/${dataset}?limit=${limit}`;
     const filters = show_filters();
     if (fields) {
@@ -137,7 +124,7 @@ const get_data = async(blob=false, selected_fields=false) => {
         url += `&${filters}`
     };
     console.log(url);
-
+    fields = await get_fields(view);
     let res = await fetch(url);
     if (blob) {
         const blob = await res.blob()
@@ -178,12 +165,13 @@ const show_data = async() => {
     results_div.className = "container-sm d-flex flex-column justify-content-center mt-5";
     spinner.className = "text-center";
     title.innerHTML = "";
+    
     const data = await get_data();
     if (!data.success) {
         return
     }
     else if (data.length == 0) {
-        title.innerHTML = `No hay resultados que cumplan el/los criterios de búsqueda.`;
+        title.innerHTML = `No hay resultados que cumplan los criterios de búsqueda.`;
         spinner.className = "visually-hidden";
         return
     };
@@ -194,7 +182,7 @@ const show_data = async() => {
     const records = data.data.slice(0,10);
 
     const tr_k = document.createElement("tr");
-    for (const [k,v] of Object.entries(records[0])) {
+    for await (let k of fields) {
         const th = document.createElement("th");
         const btn_close = document.createElement("button");
         th.style.backgroundColor = "#39adcc"; //c8d8e4 078ca9
@@ -203,20 +191,20 @@ const show_data = async() => {
         const tooltip_title = tooltips[dataset.value][k];
         th.innerHTML = `<div  class="d-flex justify-content-between text-white"><span class="tooltip_bne"data-bs-custom-class="tooltip_bne" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${tooltip_title}">${k}</span></div>`; // data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip on top"
         th.firstChild.appendChild(btn_close);
-        tr_k.appendChild(th);
+        tr_k.appendChild(th)
     };
     results_thead.appendChild(tr_k);
     records.forEach((record) => {
         const tr_v = document.createElement("tr");
-        for (const [k,v] of Object.entries(record)) {
+        for (let k of fields) {
             const td = document.createElement("td");
             td.scope = "col";
             td.className = k;
-            td.innerHTML = v;
+            td.innerHTML = record[k]?record[k].trim():"";
             tr_v.appendChild(td);
         };
         results_tbody.appendChild(tr_v);
-    });
+    })
 }
 
 const download_json = async (a) => {
@@ -249,7 +237,6 @@ const download_csv = async (a) => {
     spinner.className = "spinner-border spinner-border-sm";
     a.innerHTML = "";
     a.appendChild(spinner);
-    console.log(headers);
     const div_button = [...a.parentElement.parentElement.parentElement.children][0];
     div_button.innerHTML = "";
     div_button.appendChild(spinner);
