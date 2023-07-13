@@ -113,7 +113,7 @@ const get_data = async(blob=false, selected_fields=false) => {
     const limit = document.querySelector("#limit").value;
     const view = document.querySelector("#view").value;
     let fields = selected_fields ? selected_fields: null;
-    let url = `${base_url}/${dataset}?limit=${limit}`;
+    let url = `${base_url}/${dataset}?limit=${limit}&is_from_web=true`;
     const filters = show_filters();
     if (fields) {
         url += `&fields=${fields.join(",")}`;
