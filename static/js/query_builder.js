@@ -24,7 +24,7 @@ const tooltips = {
     }
 };
 
-const base_url = "http://144.91.118.190/api";
+const base_url = "http://bneapi.infofortis.com/api";
 // const base_url = "http://localhost:3000/api";
 
 let fields;
