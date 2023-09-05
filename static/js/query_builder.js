@@ -189,10 +189,17 @@ const show_data = async() => {
         th.style.backgroundColor = "#39adcc"; //c8d8e4 078ca9
         btn_close.className = `d-inline btn-close text-white ${k}`;
         btn_close.setAttribute("onclick", "remove_col(this)");
-        const tooltip_title = tooltips[dataset.value][k];
-        th.innerHTML = `<div  class="d-flex justify-content-between text-white"><span class="tooltip_bne"data-bs-custom-class="tooltip_bne" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${tooltip_title}">${k}</span></div>`; // data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip on top"
-        th.firstChild.appendChild(btn_close);
-        tr_k.appendChild(th)
+        try {
+            const tooltip_title = tooltips[dataset.value][k];
+            th.innerHTML = `<div  class="d-flex justify-content-between text-white"><span class="tooltip_bne"data-bs-custom-class="tooltip_bne" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${tooltip_title}">${k}</span></div>`; // data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip on top"
+            th.firstChild.appendChild(btn_close);
+            tr_k.appendChild(th)
+        } catch {
+            const tooltip_title = "Estamos trabajando en ello"
+            th.innerHTML = `<div  class="d-flex justify-content-between text-white"><span class="tooltip_bne"data-bs-custom-class="tooltip_bne" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${tooltip_title}">${k}</span></div>`; // data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip on top"
+            th.firstChild.appendChild(btn_close);
+            tr_k.appendChild(th)
+        };
     };
     results_thead.appendChild(tr_k);
     records.forEach((record) => {
