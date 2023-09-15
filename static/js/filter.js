@@ -1,6 +1,6 @@
 const options = {
     "per": ['id', 't_001', 't_024', 't_046', 't_100', 't_368', 't_370', 't_372', 't_373', 't_374', 't_375', 't_377', 't_400', 't_500', 't_510', 't_667', 't_670', 't_678', 'id_BNE', 'otros_identificadores', 'fecha_nacimiento', 'fecha_muerte', 'nombre_de_persona', 'otros_atributos_persona', 'lugar_nacimiento', 'lugar_muerte', 'pais_relacionado', 'otros_lugares_relacionados', 'lugar_residencia', 'campo_actividad', 'grupo_o_entidad_relacionada', 'ocupacion', 'genero', 'lengua', 'otros_nombres', 'persona_relacionada', 'nota_general', 'fuentes_de_informacion', 'otros_datos_biograficos', 'obras_relacionadas_en_el_catalogo_BNE'],
-    "geo": ['id', 'id_BNE', 'otros_identificadores', 'coordenadas_lat_lng', 'CDU', 'nombre_de_lugar', 'otros_nombres_de_lugar', 'entidad_relacionada', 'materia_relacionada', 'lugar_relacionado', 'nota_general', 'fuentes_de_informacion', 'lugar_jerarquico', 'obras_relacionadas_en_el_catalogo_BNE', 'id', 't_001', 't_024', 't_034', 't_080', 't_151', 't_451', 't_510', 't_550', 't_551', 't_667', 't_670', 't_781'],
+    "geo": ['id', 'id_BNE', 'otros_identificadores', 'coordenadas_lat_lng', 'CDU', 'nombre_de_lugar', 'otros_nombre_de_lugar', 'entidad_relacionada', 'materia_relacionada', 'lugar_relacionado', 'nota_general', 'fuentes_de_informacion', 'lugar_jerarquico', 'obras_relacionadas_en_el_catalogo_BNE', 'id', 't_001', 't_024', 't_034', 't_080', 't_151', 't_451', 't_510', 't_550', 't_551', 't_667', 't_670', 't_781'],
     "mon": ['id', "t_001",
         "t_008",
         "t_017",
@@ -80,9 +80,7 @@ const options = {
         "nota_de_contenido",
         "notas",
         "procedencia",
-        "premios",
-        "tema",
-        "genero_forma","tipo_de_documento"],
+        "premios","tema","genero_forma","tipo_de_documento"],
     "ent": [
         "id",
     "t_001",
