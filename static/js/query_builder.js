@@ -89,7 +89,6 @@ const show_filters = () => {
 };
 const trash_filter = (button) => {
     const div_filter = button.parentElement.parentElement.parentElement.parentElement;
-    console.log(div_filter);
     if (div_filter.parentElement.children.length > 3) {
         if (div_filter.id == "bne_and_or_0") {
             console.log(document.getElementById(div_filter.id));
@@ -122,7 +121,7 @@ const get_data = async(blob=false, selected_fields=false) => {
         url += `&view=${view}`;
     };
     if (filters) {
-        url += `&${filters}`
+        url += filters === "="? "":`&${filters}`;
     };
     console.log(url);
     fields = await get_fields(view);
@@ -169,6 +168,12 @@ const show_data = async() => {
     
     const data = await get_data();
     if (!data.success) {
+        if (data.message.startsWith("This field")) {
+            const not_field = data.message.split("db: ")[1].split(" ")[0];
+            title.innerHTML = `El filtro ${not_field.toUpperCase()} no existe en la base de datos`;
+            spinner.className = "visually-hidden";
+            return
+        };
         return
     }
     else if (data.length == 0) {
