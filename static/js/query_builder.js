@@ -1,6 +1,6 @@
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-
+const datasets = ["per", "mon", "moa", "ent", "ser", "mss", "geo"]
 new bootstrap.Tooltip(document.body, {selector:".tooltip_bne"});
 const tooltips = {
     per: {"id": "identificador de la persona en el catálogo de la BNE", "otros_identificadores": "identificadores de la persona en otros catálogos (viaf, lcnf, isni, etc.)", "fecha_nacimiento": "fecha de nacimiento de la persona", "fecha_muerte": "fecha de muerte de la persona", "nombre_de_persona": "", "otros_atributos_persona": "título, cargo, etc. ", "lugar_nacimiento": "país, región, provincia y localidad donde ha nacido la persona", "lugar_muerte": "país, región, provincia y localidad donde ha fallecido la persona", "pais_relacionado": "otro país relacionado con la persona", "otros_lugares_relacionados": "otros lugares relacionados con la persona", "lugar_residencia": "lugar de residencia de la persona, si es especialmente significativo", "campo_actividad": "disciplina o actividad a la que se dedica la persona", "grupo_o_entidad_relacionada": "grupo, organismo, etc., a la que pertenece la persona", "ocupacion": "profesión desempeñada por la persona", "genero": "género de la persona (masculino, femenino u otros)", "lengua": "lengua en la que la persona escribe la mayor parte de su obra", "otros_nombres": "otros nombres por los que es conocida la persona", "persona_relacionada": "otras personas relacionadas con la persona", "nota_general": "más información sobre la persona", "fuentes_de_informacion": "fuentes de información de las que se han obtenido los datos de la persona", "otros_datos_biograficos": "otra información biográfica de la persona", "obras_relacionadas_en_el_catalogo_BNE": "obras relacionadas con la persona que se pueden encontrar en el catálogo de la BNE", "nombre_de_persona": "nombre de persona"},
@@ -48,21 +48,54 @@ const reset_and_ors = () => {
 
 reset_and_ors();
 
-const add_filter = (button) => {
+const add_filter = () => {
+    const filter_html = `
+    <div class="d-flex flex-row border-1 border mb-4 justify-content-center align-items-center bne_and_or" style="width: 120px;height: 30px;" id="bne_and_or_1">
+        <span class="text-primary">Y&nbsp&nbsp</span>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" onclick="and_or_switch(this)">
+            </div>
+            <span class="">O</span>
+    </div>
+    <div class="container-sm border border-1 d-flex align-items-center my-4  position-relative" style="height:75px">
+        <div class="input-group b_filter_group" style="height: 50px;">
+            <input  type="text" class="form-control k" placeholder="Nombre, fecha de nacimiento..." onkeydown="show_ul(this)">
+            <select class="form-select" aria-label="Default select example" name="with">
+                <option selected onclick="set_value(this)">con valor</option>
+                <option onclick="without_value(this)">sin valor</option>
+                <option value="3" onclick="regardless_value(this)">sin importar valor</option>
+              </select>
+            <input  type="text" class="form-control v" placeholder="Valor">
+            <div class="d-flex align-items-center">
+            <button class="btn" onclick="trash_filter(this)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                </svg>
+            </button>
+            </div>
+        </div>
+    </div>
+`
+
     const container = document.querySelector("#filter_container");
-    const node = [...document.querySelectorAll(".filter_div")].at(-1).cloneNode(true);
-    const others_and_or_nodes = [...document.querySelectorAll(".bne_and_or")];
-    others_and_or_nodes.forEach((and_or,i) => {
-        and_or.className = "d-flex flex-row border-1 border mb-4 justify-content-center align-items-center bne_and_or";
-        and_or.id = "bne_and_or_" + i;
-        node.id = "bne_and_or_" + i;
-        // and_or.click();
-    });
-    // node.querySelector(".bne_and_or").className = "visually-hidden";
-    Array(...node.getElementsByTagName("input")).forEach((input) => input.value = null);
-    container.appendChild(node);
-    return node;
+    const filter_div = document.createElement("div");
+    filter_div.innerHTML = filter_html;
+    filter_div.className = "filter_div";
+    container.appendChild(filter_div);
+    return filter_div;
+    // const node = [...document.querySelectorAll(".filter_div")].at(0).cloneNode(true);
+    // const others_and_or_nodes = [...document.querySelectorAll(".bne_and_or")];
+    // others_and_or_nodes.forEach((and_or,i) => {
+    //     and_or.className = "d-flex flex-row border-1 border mb-4 justify-content-center align-items-center bne_and_or";
+    //     and_or.id = "bne_and_or_" + i;
+    //     node.id = "bne_and_or_" + i;
+    // });
+    // Array(...node.getElementsByTagName("input")).forEach((input) => input.value = null);
+    // container.appendChild(node);
+    // return node;
 };
+
 
 const populate_filters = () => {
     const get_args = _ =>
@@ -76,16 +109,18 @@ const populate_filters = () => {
     };
     Object.entries(args).forEach((arg, i) => {
         [k,v] = arg;
-        if (i > 0) add_filter();
+        if (i > 1) add_filter();
     });
     Object.entries(args).forEach((arg, i) => {
         [k,v] = arg;
-        const filter = [...document.querySelectorAll(".filter_div")].at(i);
-        const inputs = Array(...filter.getElementsByTagName("input"));
-        inputs[0].value = k;
-        inputs[1].value = v;
-        console.log(inputs);
-        console.log(k,":",v);
+        if (k === "dataset") {
+            
+        } else {
+            const filter = [...document.querySelectorAll(".filter_div")].at(i-1);
+            const inputs = Array(...filter.getElementsByTagName("input"));
+            inputs[1].value = k;
+            inputs[2].value = v;    
+        };
     });
 };
 populate_filters();
@@ -99,7 +134,7 @@ const show_filters = () => {
     for (let i = 0; i < keys.length; i++) {
         let key = keys.at(i);
         let value = values.at(i).value;
-        let and_or_switch = key.parentElement.parentElement.parentElement.getElementsByClassName("bne_and_or")[0].getElementsByTagName("input")[0];
+        // let and_or_switch = key.parentElement.parentElement.parentElement.getElementsByClassName("bne_and_or")[0].getElementsByTagName("input")[0];
         key = key.value;
 
         if (kvs[key]) {
@@ -116,20 +151,22 @@ const show_filters = () => {
 };
 const trash_filter = (button) => {
     const div_filter = button.parentElement.parentElement.parentElement.parentElement;
-    if (div_filter.parentElement.children.length > 3) {
-        if (div_filter.id == "bne_and_or_0") {
-            console.log(document.getElementById(div_filter.id));
-            document.getElementById(div_filter.id).className = "bne_and_or visually-hidden";
-        }else {
-            document.getElementById(div_filter.id).remove();
-        };
-        div_filter.remove();
-    } else {
-        div_filter.className += " bg-warning";
-        setTimeout(() => {
-            div_filter.className = div_filter.className.slice(0,div_filter.className.indexOf(" bg-warning"))
-        }, 1000);
-    };
+    div_filter.remove();
+    // if (div_filter.parentElement.children.length >= 3) {
+    //     if (div_filter.id == "bne_and_or_0") {
+    //         console.log(document.getElementById(div_filter.id));
+    //         document.getElementById(div_filter.id).className = "bne_and_or visually-hidden";
+    //     }else {
+    //         console.log("XXX")
+    //         document.getElementById(div_filter.id).remove();
+    //     };
+    //     div_filter.remove();
+    // } else {
+    //     div_filter.className += " bg-warning";
+    //     setTimeout(() => {
+    //         div_filter.className = div_filter.className.slice(0,div_filter.className.indexOf(" bg-warning"))
+    //     }, 1000);
+    // };
 };
 
 let query;
@@ -151,7 +188,7 @@ const get_data = async(blob=false, selected_fields=false) => {
         url += filters === "="? "":`&${filters}`;
     };
     console.log(url);
-    window.history.replaceState("", "", `?${filters}`);
+    window.history.replaceState("", "", `?dataset=${dataset}&${filters}`);
     fields = await get_fields(view);
     let res = await fetch(url);
     if (blob) {
