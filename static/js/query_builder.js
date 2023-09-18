@@ -61,7 +61,34 @@ const add_filter = (button) => {
     // node.querySelector(".bne_and_or").className = "visually-hidden";
     Array(...node.getElementsByTagName("input")).forEach((input) => input.value = null);
     container.appendChild(node);
+    return node;
 };
+
+const populate_filters = () => {
+    const get_args = _ =>
+        [...new URLSearchParams(window.location.href.split('?')[1])].reduce(
+            (a, [k, v]) => ((a[k] = v), a),
+            {}
+        );
+    let args = get_args();
+    if (!args) {
+        return;
+    };
+    Object.entries(args).forEach((arg, i) => {
+        [k,v] = arg;
+        if (i > 0) add_filter();
+    });
+    Object.entries(args).forEach((arg, i) => {
+        [k,v] = arg;
+        const filter = [...document.querySelectorAll(".filter_div")].at(i);
+        const inputs = Array(...filter.getElementsByTagName("input"));
+        inputs[0].value = k;
+        inputs[1].value = v;
+        console.log(inputs);
+        console.log(k,":",v);
+    });
+};
+populate_filters();
 const show_filters = () => {
     let result = "";
     const kvs = {};
@@ -124,6 +151,7 @@ const get_data = async(blob=false, selected_fields=false) => {
         url += filters === "="? "":`&${filters}`;
     };
     console.log(url);
+    window.history.replaceState("", "", `?${filters}`);
     fields = await get_fields(view);
     let res = await fetch(url);
     if (blob) {
@@ -170,16 +198,21 @@ const show_data = async() => {
     if (!data.success) {
         if (data.message.startsWith("This field")) {
             const not_field = data.message.split("db: ")[1].split(" ")[0];
-            title.innerHTML = `El filtro ${not_field.toUpperCase()} no existe en la base de datos`;
+            title.innerHTML = `El filtro <span style='color:red;'>${not_field}</span> no existe en la base de datos`;
             spinner.className = "visually-hidden";
-            return
+            return;
+        } 
+        else if (data.message == "SQLite3 Operational Error") {
+            title.innerHTML = `Debe ser indicado un valor correcto`;
+            spinner.className = "visually-hidden";
+            return;
         };
-        return
+        return;
     }
     else if (data.length == 0) {
         title.innerHTML = `No hay resultados que cumplan los criterios de búsqueda.`;
         spinner.className = "visually-hidden";
-        return
+        return;
     };
     console.log(data);
     spinner.className = "visually-hidden";
