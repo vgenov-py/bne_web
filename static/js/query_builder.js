@@ -114,7 +114,7 @@ const populate_filters = () => {
     Object.entries(args).forEach((arg, i) => {
         [k,v] = arg;
         if (k === "dataset") {
-            
+            document.querySelector("#dataset").value = v;
         } else {
             const filter = [...document.querySelectorAll(".filter_div")].at(i-1);
             const inputs = Array(...filter.getElementsByTagName("input"));
