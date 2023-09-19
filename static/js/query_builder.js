@@ -1,5 +1,6 @@
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+console.log("Código desarrollado por Vito Genovese para la BNE, visita https://infofortis.com")
 const datasets = ["per", "mon", "moa", "ent", "ser", "mss", "geo"]
 new bootstrap.Tooltip(document.body, {selector:".tooltip_bne"});
 const tooltips = {
@@ -84,16 +85,6 @@ const add_filter = () => {
     filter_div.className = "filter_div";
     container.appendChild(filter_div);
     return filter_div;
-    // const node = [...document.querySelectorAll(".filter_div")].at(0).cloneNode(true);
-    // const others_and_or_nodes = [...document.querySelectorAll(".bne_and_or")];
-    // others_and_or_nodes.forEach((and_or,i) => {
-    //     and_or.className = "d-flex flex-row border-1 border mb-4 justify-content-center align-items-center bne_and_or";
-    //     and_or.id = "bne_and_or_" + i;
-    //     node.id = "bne_and_or_" + i;
-    // });
-    // Array(...node.getElementsByTagName("input")).forEach((input) => input.value = null);
-    // container.appendChild(node);
-    // return node;
 };
 
 
@@ -142,31 +133,17 @@ const show_filters = () => {
         } else {
             kvs[key] = value;
         };
-        // result += `${key}=${value}&`;
-    }
+    };
     for ([k,v] of Object.entries(kvs)) {
-        result += `${k}=${v}&`;
-    }
+        if (v) {
+            result += `${k}=${v}&`;
+        };
+    };
     return result.substring(0,result.length -1);
 };
 const trash_filter = (button) => {
     const div_filter = button.parentElement.parentElement.parentElement.parentElement;
     div_filter.remove();
-    // if (div_filter.parentElement.children.length >= 3) {
-    //     if (div_filter.id == "bne_and_or_0") {
-    //         console.log(document.getElementById(div_filter.id));
-    //         document.getElementById(div_filter.id).className = "bne_and_or visually-hidden";
-    //     }else {
-    //         console.log("XXX")
-    //         document.getElementById(div_filter.id).remove();
-    //     };
-    //     div_filter.remove();
-    // } else {
-    //     div_filter.className += " bg-warning";
-    //     setTimeout(() => {
-    //         div_filter.className = div_filter.className.slice(0,div_filter.className.indexOf(" bg-warning"))
-    //     }, 1000);
-    // };
 };
 
 let query;
