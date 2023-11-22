@@ -148,6 +148,7 @@ const trash_filter = (button) => {
 
 let query;
 let headers;
+let url;
 const get_headers = async () => {
     const dataset = document.querySelector("#dataset").value;
     const view = document.querySelector("#view").value;
@@ -170,7 +171,7 @@ const get_data = async(download=false, selected_fields=false) => {
     const limit = document.querySelector("#limit").value;
     const view = document.querySelector("#view").value;
     let fields = selected_fields ? selected_fields: null;
-    let url = `${base_url}/${dataset}?limit=${limit}&is_from_web=true`;
+    url = `${base_url}/${dataset}?limit=${limit}&is_from_web=true`;
     // get_headers();
     const filters = show_filters();
     if (fields) {
@@ -183,18 +184,11 @@ const get_data = async(download=false, selected_fields=false) => {
     };
     window.history.replaceState("", "", `?dataset=${dataset}&${filters}`);
     fields = await get_fields(view);
-    let res = await fetch(url);
-    if (download=="csv") {
-        url += ".csv";
-        return url;
-    }
-    else if (download=="json") {
-        url += ".json";
+    if (download) {
         return url;
     };
-    console.log("XXXX")
+    let res = await fetch(url);
     const data = await res.json();
-    console.log(url);
     return data;
 };
 
@@ -283,31 +277,42 @@ const show_data = async() => {
     })
 }
 
-const download_json = async (a) => {
-    const spinner = Array(...document.querySelector("#results_spinner").children)[0].cloneNode();
-    // spinner.className = "spinner-border spinner-border-sm";
-    // a.innerHTML = "";
-    // a.appendChild(spinner);
-    a.href = await get_data("json", headers);
-    a.click();
-};
-const download_csv = async (a) => {
-    try {
-        console.log(headers, "download_csv")
-        const url = await get_data("csv",headers);
-        console.log("url", url)
-        try {
-            a.href = await url;
-        } catch {
-            console.log("stupid")
+// const download_json = async (a) => {
+//     const spinner = Array(...document.querySelector("#results_spinner").children)[0].cloneNode();
+//     // spinner.className = "spinner-border spinner-border-sm";
+//     // a.innerHTML = "";
+//     // a.appendChild(spinner);
+//     a.href = await get_data("json", headers);
+//     a.click();
+// };
+// const download_csv = async (a) => {
+//     try {
+//         console.log(headers, "download_csv")
+//         const url = await get_data("csv",headers);
+//         console.log("url", url)
+//         try {
+//             a.href = await url;
+//         } catch {
+//             console.log("stupid")
     
-        };
-        console.log(a.href);
-        a.click();
-        a.remove
-        a.href = "";
-    } catch {
-        console.log("stupid 2")
+//         };
+//         console.log(a.href);
+//         a.click();
+//         a.remove
+//         a.href = "";
+//     } catch {
+//         console.log("stupid 2")
 
-    }
+//     }
+// };
+
+const set_download_link = async (button) => {
+    const csv_a = document.querySelector("#d_csv");
+    const json_a = document.querySelector("#d_json");
+
+    url = await get_data(true, headers);
+    csv_a.href = url + ".csv";
+    json_a.href = url + ".json";
+    console.log(url);
+
 };
