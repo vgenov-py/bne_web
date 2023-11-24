@@ -172,7 +172,7 @@ const get_data = async(download=false, selected_fields=false) => {
     const view = document.querySelector("#view").value;
     let fields = selected_fields ? selected_fields: null;
     url = `${base_url}/${dataset}?limit=${limit}&is_from_web=true`;
-    // get_headers();
+    get_headers();
     const filters = show_filters();
     if (fields) {
         url += `&fields=${fields.join(",")}`;
