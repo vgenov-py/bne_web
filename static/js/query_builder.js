@@ -157,7 +157,6 @@ const get_headers = async () => {
         url += `?view=${view}`;
     };
     const res = await fetch(url);
-    console.log(url);
     const data = await res.json();
     if (data.fields) {
         console.log(data.fields);
@@ -220,9 +219,8 @@ const show_data = async() => {
     
     const data = await get_data();
     if (!data.success) {
-        if (data.message.startsWith("This field")) {
-            const not_field = data.message.split("db: ")[1].split(" ")[0];
-            title.innerHTML = `El filtro <span style='color:red;'>${not_field}</span> no existe en la base de datos`;
+        if (data.message.startsWith("El filtro")) {
+            title.innerHTML = data.message;
             spinner.className = "visually-hidden";
             return;
         } 
@@ -233,12 +231,11 @@ const show_data = async() => {
         };
         return;
     }
-    else if (data.length == 0) {
+    else if (await data.data.length == 0) {
         title.innerHTML = `No hay resultados que cumplan los criterios de búsqueda.`;
         spinner.className = "visually-hidden";
         return;
     };
-    console.log(data);
     spinner.className = "visually-hidden";
     title.innerHTML = `Resultados: ${data.length} - ${parseFloat(data.time).toFixed(2)}s`
     download_button.className = "btn btn-dark dropdown-toggle";
@@ -276,35 +273,6 @@ const show_data = async() => {
         results_tbody.appendChild(tr_v);
     })
 }
-
-// const download_json = async (a) => {
-//     const spinner = Array(...document.querySelector("#results_spinner").children)[0].cloneNode();
-//     // spinner.className = "spinner-border spinner-border-sm";
-//     // a.innerHTML = "";
-//     // a.appendChild(spinner);
-//     a.href = await get_data("json", headers);
-//     a.click();
-// };
-// const download_csv = async (a) => {
-//     try {
-//         console.log(headers, "download_csv")
-//         const url = await get_data("csv",headers);
-//         console.log("url", url)
-//         try {
-//             a.href = await url;
-//         } catch {
-//             console.log("stupid")
-    
-//         };
-//         console.log(a.href);
-//         a.click();
-//         a.remove
-//         a.href = "";
-//     } catch {
-//         console.log("stupid 2")
-
-//     }
-// };
 
 const set_download_link = async (button) => {
     const csv_a = document.querySelector("#d_csv");
