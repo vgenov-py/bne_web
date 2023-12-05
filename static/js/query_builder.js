@@ -237,7 +237,7 @@ const show_data = async() => {
         return;
     };
     spinner.className = "visually-hidden";
-    title.innerHTML = `Resultados: ${data.length} - ${parseFloat(data.time).toFixed(2)}s`
+    title.innerHTML = `Tiempo de respuesta: ${parseFloat(data.time).toFixed(2)}s`
     download_button.className = "btn btn-dark dropdown-toggle";
     const records = data.data.slice(0,10);
 
